@@ -1,8 +1,8 @@
 export default function () {
     return [
         {
-            "id": 1,
-            "name": "Step 1",
+            "id": 0,
+            "name": "Step 0",
             "depends_on": false,
             "next_condition": {
                 "interet_general": "coucou"
@@ -102,13 +102,13 @@ export default function () {
                     "type": "text",
                     "placeholder": "culture"
                 }],
-                "sport": [{
+                "default": [{
                     "id": "sport",
                     "label": "Sport",
                     "type": "text",
                     "placeholder": "culture"
                 }],
-                "default": false
+                "sport": false
             }
         }
     ]

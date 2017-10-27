@@ -5,7 +5,7 @@ export default ({ input }) => {
     function renderCheckBoxes() {
         return input.items.map((checkbox) => {
             return (
-                <div className="form-check">
+                <div className="form-check" key={checkbox.id}>
                 <label for={checkbox.id} className="form-check-label">          
                      <input 
                         type="checkbox" 
