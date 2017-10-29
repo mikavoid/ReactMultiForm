@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { bindActionCreators } from 'redux'
 
-import loadStep from '../actions'
+import loadStep, { setAnswer } from '../actions'
 
 import Field from '../components/form/Field'
 
@@ -13,7 +13,10 @@ class StepList extends Component
     constructor(props) {
         super(props)
 
-        this.state = { currentStep : 0 }
+        this.state = { 
+            currentStep : 0,
+            answers : []
+        }
         this.renderList = this.renderList.bind(this)
         this.loadNextStep = this.loadNextStep.bind(this)
         this.loadPreviousStep = this.loadPreviousStep.bind(this)
@@ -27,6 +30,9 @@ class StepList extends Component
 
     loadNextStep(e) {
         e.preventDefault()
+
+        // Remplir les answer et ensuite passer à la suite
+
         
         return this.setState({currentStep: this.state.currentStep + 1}, () => {
             return this.loadStep()
@@ -90,6 +96,20 @@ class StepList extends Component
         )
     }
 
+    onValue(data) {
+        // Chercher de quel champs la valeur provient
+        // La stocker dans les answers sous cette forme
+        /*const obj = {
+            step: 0,
+            infos: {
+                id: "interet_general",
+                label: "interet general"
+            },
+            value: 'blabla'
+        }*/
+        console.log('coucou: ', data)
+    }
+
     renderForm() {
         const step = this.props.activeStep
         if (!step) {
@@ -100,20 +120,12 @@ class StepList extends Component
             <form>
                 <div id="formBody">   
                     {this.state.currentStep}
-                    {step.questions.default.map((input) => <Field key={input.id} input={input} />)}
+                    {step.questions.default.map((input) => <Field onValue={this.onValue} key={input.id} input={input} />)}
                 </div>
                 { this.renderNavButtons() }
             </form>
         )
-
         return form
-        // recuperer la step
-
-        // Pour chaque ligne générer un input adapté
-        // -- Est-ce que le type est autorisé ?
-        // -- render le input
-
-        // Ajouter le submit
     }
 
     render() {
@@ -133,7 +145,7 @@ function mapStateToProps(state) {
 }
 
 function mapActionsToDispatch(dispatch) {
-   return bindActionCreators({ loadStep: loadStep }, dispatch)
+   return bindActionCreators({ loadStep, setAnswer }, dispatch)
 }
 
 export default connect(mapStateToProps, mapActionsToDispatch)(StepList)

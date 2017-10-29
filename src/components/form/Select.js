@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default ({ input }) => {
+export default ({ input, onValue }) => {
   
     function renderOptions() {
         return input.items.map((opt) => {
@@ -12,6 +12,7 @@ export default ({ input }) => {
         <div className="form-group">
             <label htmlFor={input.id}>{input.label}</label>
             <select 
+                onChange={onValue}
                 className="form-control" 
                 required={input.required}  
                 multiple={input.multiple}

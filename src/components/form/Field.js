@@ -26,6 +26,14 @@ export default class Field extends Component
         super(props)
     }
 
+    onValue(e) {
+        const fieldInfos = this.props.input
+        const value = e.target.value
+
+        
+        return this.props.onValue({ fieldInfos, value })
+    }
+
     buildField() {
         // check type
         const input = this.props.input
@@ -34,7 +42,7 @@ export default class Field extends Component
             return
         }
         const SpecificInput = VALID_TYPES[input.type].component
-        return <SpecificInput input={input} rules="required" />
+        return <SpecificInput onValue={this.onValue.bind(this)} input={input} rules="required" />
     }
 
     render() {

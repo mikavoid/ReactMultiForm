@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default ({ input }) => {
+export default ({ input, onValue }) => {
   
     function renderCheckBoxes() {
         return input.items.map((checkbox) => {
@@ -8,6 +8,7 @@ export default ({ input }) => {
                 <div className="form-check" key={checkbox.id}>
                 <label for={checkbox.id} className="form-check-label">          
                      <input 
+                        onChange={onValue}
                         type="checkbox" 
                         className="form-check-input" 
                         name={input.id} 

@@ -18,6 +18,13 @@ export default function () {
                         ],
                         "required": true
                     },
+                    {
+                        "id": "interet_general",
+                        "label": "Interet général",
+                        "type": "text",
+                        "placeholder": "blabla",
+                        "required": true
+                    }
                 ]
             }
         },
