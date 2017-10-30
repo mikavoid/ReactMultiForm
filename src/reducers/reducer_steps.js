@@ -19,6 +19,40 @@ export default function () {
                         "required": true
                     },
                     {
+                        "id": "check",
+                        "label": "Un checkbox",
+                        "type": "checkbox",
+                        "items" : [
+                            {text: "Le choix 1", value:"1"},
+                            {text: "Le choix 2", value:"2", checked: true},
+                            {text: "Le choix 3", value:"3"},
+                            {text: "Le choix 4", value:"4"}
+                        ]
+                    },
+                    {
+                        "id": "radio",
+                        "label": "Un radio",
+                        "type": "radio",
+                        "items" : [
+                            {text: "Le choix 1", value:"1"},
+                            {text: "Le choix 2", value:"2", checked: true},
+                            {text: "Le choix 3", value:"3"},
+                            {text: "Le choix 4", value:"4"}
+                        ]
+                    },
+                    {
+                        "id": "select",
+                        "label": "Un select",
+                        "type": "select",
+                        "items" : [
+                            {text: "Le choix 1", value:"1"},
+                            {text: "Le choix 2", value:"2", selected: true},
+                            {text: "Le choix 3", value:"3"},
+                            {text: "Le choix 4", value:"4"}
+                        ],
+                        "multiple": true
+                    },
+                    {
                         "id": "interet_general",
                         "label": "Interet général",
                         "type": "text",
@@ -50,7 +84,7 @@ export default function () {
                     {
                         "id": "select",
                         "label": "Un select",
-                        "type": "select",
+                        "type": "radio",
                         "items" : [
                             {text: "Le choix 1", value:"1"},
                             {text: "Le choix 2", value:"2", selected: true},

@@ -23,11 +23,12 @@ class StepList extends Component
         this.loadPreviousStep = this.loadPreviousStep.bind(this)
         this.loadStep = this.loadStep.bind(this)
         this.renderNavButtons = this.renderNavButtons.bind(this)
+        this.onValue = this.onValue.bind(this)
     }
 
     initStepAnswers() {
         const questionGroup = 'default'
-        const step = this.props.activeStep
+        const step = this.props.activeStep || this.props.steps[0]
         const questions = step.questions[questionGroup]
         const answers = [...this.state.answers]
 
@@ -62,6 +63,7 @@ class StepList extends Component
     }
 
     componentWillMount() {
+        this.initStepAnswers(0)
         return this.props.loadStep(this.props.steps[0])
     }
 
@@ -129,6 +131,17 @@ class StepList extends Component
     }
 
     onValue(data) {
+        console.log('data', data)
+        // On récupère la réponse dans le state
+        const responseIndex = this.state.answers.findIndex((answer) => answer.id == data.fieldInfos.id)
+        const answers = [...this.state.answers]
+        answers[responseIndex].value = data.value
+        this.setState({answers}, () => {
+            console.log('###', this.state.answers)
+        })
+
+        
+        
         // Chercher de quel champs la valeur provient
         // La stocker dans les answers sous cette forme
         /*const obj = {
@@ -151,7 +164,7 @@ class StepList extends Component
             <form>
                 <div id="formBody">   
                     {this.state.currentStep}
-                    {step.questions.default.map((input) => <Field onValue={this.onValue} key={input.id} input={input} />)}
+                    {step.questions.default.map((input) => <Field  onValue={this.onValue} key={input.id} input={input} />)}
                 </div>
                 { this.renderNavButtons() }
             </form>

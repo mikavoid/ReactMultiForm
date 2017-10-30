@@ -26,11 +26,15 @@ export default class Field extends Component
         super(props)
     }
 
-    onValue(e) {
+    onValue(e, multiple = []) {
         const fieldInfos = this.props.input
-        const value = e.target.value
+        let value = null
+        if (multiple.length > 0) {
+            value = multiple
+        } else {
+            value = [e.target.value]
+        }
 
-        
         return this.props.onValue({ fieldInfos, value })
     }
 
