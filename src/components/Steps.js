@@ -17,11 +17,48 @@ class StepList extends Component
             currentStep : 0,
             answers : []
         }
+
         this.renderList = this.renderList.bind(this)
         this.loadNextStep = this.loadNextStep.bind(this)
         this.loadPreviousStep = this.loadPreviousStep.bind(this)
         this.loadStep = this.loadStep.bind(this)
         this.renderNavButtons = this.renderNavButtons.bind(this)
+    }
+
+    initStepAnswers() {
+        const questionGroup = 'default'
+        const step = this.props.activeStep
+        const questions = step.questions[questionGroup]
+        const answers = [...this.state.answers]
+
+        // Remplir les answer et ensuite passer à la suite
+        if (!questions) {
+            return
+        }
+        for (const question of questions) {
+            const response = {
+                step: step.id, 
+                id: question.id,
+                label: question.label,
+                value: ''
+            }
+
+            if (this.anwserExists(response).length <= 0){
+                answers.push(response)
+                console.log('pushed', response)
+            }
+        }
+
+        return this.setState({answers}, () => {
+            console.log('ok', this.state.answers)
+        })
+
+    }
+
+    anwserExists(response) {
+        return this.state.answers.filter((answer) => {
+            return answer.id === response.id
+        })
     }
 
     componentWillMount() {
@@ -30,14 +67,9 @@ class StepList extends Component
 
     loadNextStep(e) {
         e.preventDefault()
-
-        // Remplir les answer et ensuite passer à la suite
-
-        
-        return this.setState({currentStep: this.state.currentStep + 1}, () => {
-            return this.loadStep()
-        })
-        
+            return this.setState({currentStep: this.state.currentStep + 1}, () => {
+                return this.loadStep()
+            })
     }
 
     loadPreviousStep(e) {
@@ -49,12 +81,12 @@ class StepList extends Component
 
     loadStep() {
         const step = this.props.steps[this.state.currentStep]
+        this.initStepAnswers()
         return this.props.loadStep(step)
     }
 
     renderList() {
         this.props.steps.map((step) => {
-            console.log(step)
             return (
                 <div class="card" style="width: 20rem;">
                 <div class="card-body">
@@ -107,7 +139,6 @@ class StepList extends Component
             },
             value: 'blabla'
         }*/
-        console.log('coucou: ', data)
     }
 
     renderForm() {
