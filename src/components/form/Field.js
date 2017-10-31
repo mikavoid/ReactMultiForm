@@ -26,16 +26,10 @@ export default class Field extends Component
         super(props)
     }
 
-    onValue(e, multiple = []) {
+    onValue(values = []) {
+        console.log('Input recieved:', values)
         const fieldInfos = this.props.input
-        let value = null
-        if (multiple.length > 0) {
-            value = multiple
-        } else {
-            value = [e.target.value]
-        }
-
-        return this.props.onValue({ fieldInfos, value })
+        return this.props.onValue({ fieldInfos, values })
     }
 
     buildField() {

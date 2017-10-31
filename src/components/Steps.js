@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { bindActionCreators } from 'redux'
 
-import loadStep, { setAnswer } from '../actions'
+import loadStep, { setAnswer, submitForm } from '../actions'
 
 import Field from '../components/form/Field'
 
@@ -18,21 +18,58 @@ class StepList extends Component
             answers : []
         }
 
-        this.renderList = this.renderList.bind(this)
         this.loadNextStep = this.loadNextStep.bind(this)
         this.loadPreviousStep = this.loadPreviousStep.bind(this)
         this.loadStep = this.loadStep.bind(this)
         this.renderNavButtons = this.renderNavButtons.bind(this)
         this.onValue = this.onValue.bind(this)
+        this.onSubmit = this.onSubmit.bind(this)
     }
 
+    // Life Cycle Method
+
+    componentWillMount() {
+        this.initStepAnswers(0)
+        return this.props.loadStep(this.props.steps[0])
+    }
+
+    render() {
+        return (
+            <div>
+                { this.renderForm() }
+            </div>
+        )
+    }
+
+    // Event Handlers
+    onSubmit(e) {
+        e.preventDefault()
+        return this.props.submitForm(this.state.answers)
+    }
+
+    /**
+     * Called whenever an input is changed
+     * @param {Array: [fieldInfos[], value]} data 
+     */
+    onValue(data) {
+        const responseIndex = this.state.answers.findIndex((answer) => answer.id == data.fieldInfos.id)
+        const answers = [...this.state.answers]
+        answers[responseIndex].value = data.value
+        this.setState({answers})
+    }
+
+    // Methods
+
+    /**
+     * Creates a local state for answers
+     * These answers will be sent to redux when loading next step
+     */
     initStepAnswers() {
         const questionGroup = 'default'
         const step = this.props.activeStep || this.props.steps[0]
         const questions = step.questions[questionGroup]
         const answers = [...this.state.answers]
 
-        // Remplir les answer et ensuite passer à la suite
         if (!questions) {
             return
         }
@@ -51,22 +88,25 @@ class StepList extends Component
         }
 
         return this.setState({answers}, () => {
-            console.log('ok', this.state.answers)
+            console.log('Local answers', this.state.answers)
         })
 
     }
 
+    /**
+     * Check if an answer already exists in the local state
+     * @param {Object} response 
+     */
     anwserExists(response) {
         return this.state.answers.filter((answer) => {
             return answer.id === response.id
         })
     }
 
-    componentWillMount() {
-        this.initStepAnswers(0)
-        return this.props.loadStep(this.props.steps[0])
-    }
-
+    /**
+     * Load and mount the next step of the form according to relationship
+     * @param {*} e 
+     */
     loadNextStep(e) {
         e.preventDefault()
             return this.setState({currentStep: this.state.currentStep + 1}, () => {
@@ -74,6 +114,10 @@ class StepList extends Component
             })
     }
 
+    /**
+     * Load ans mount the previous step of the form according to relationship
+     * @param {*} e 
+     */
     loadPreviousStep(e) {
         e.preventDefault()
         return this.setState({currentStep: this.state.currentStep - 1 }, () => {
@@ -81,43 +125,32 @@ class StepList extends Component
         })
     }
 
+    /**
+     * Call the redux action creator: loadStep in charge of loading the current step
+     */
     loadStep() {
         const step = this.props.steps[this.state.currentStep]
         this.initStepAnswers()
         return this.props.loadStep(step)
     }
 
-    renderList() {
-        this.props.steps.map((step) => {
-            return (
-                <div class="card" style="width: 20rem;">
-                <div class="card-body">
-                    <h4 class="card-title">{step.id}</h4>
-                </div>
-                </div>
-            )
-        })
-    }
-
-    submit(e) {
-        e.preventDefault()
-        alert('submit')
-    }
-
+    /**
+     * Print navigation buttons according to the form current state
+     */
     renderNavButtons() {
         if (this.state.currentStep === 0) {
             return (
-            <div className="btn-group">
-                <button type="button" className="btn btn-primary" onClick={this.loadNextStep}>Next</button>
-            </div>
-        )
+                <div className="btn-group">
+                    <button type="button" className="btn btn-primary" onClick={this.loadNextStep}>Next</button>
+                </div>
+            )
         }
 
         if (!this.props.steps[this.state.currentStep + 1]) {
             return (
                 <div className="btn-group">
                     <button type="button" className="btn btn-primary" onClick={this.loadPreviousStep}>Previous</button>
-                    <button type="button" className="btn btn-primary" onClick={this.submit}>Finish</button>
+                    <button type="submit" className="btn btn-primary">Finish</button>
                 </div>
             )
         }
@@ -130,30 +163,10 @@ class StepList extends Component
         )
     }
 
-    onValue(data) {
-        console.log('data', data)
-        // On récupère la réponse dans le state
-        const responseIndex = this.state.answers.findIndex((answer) => answer.id == data.fieldInfos.id)
-        const answers = [...this.state.answers]
-        answers[responseIndex].value = data.value
-        this.setState({answers}, () => {
-            console.log('###', this.state.answers)
-        })
-
-        
-        
-        // Chercher de quel champs la valeur provient
-        // La stocker dans les answers sous cette forme
-        /*const obj = {
-            step: 0,
-            infos: {
-                id: "interet_general",
-                label: "interet general"
-            },
-            value: 'blabla'
-        }*/
-    }
-
+    
+    /**
+     * Render the dynamic form
+     */
     renderForm() {
         const step = this.props.activeStep
         if (!step) {
@@ -161,9 +174,8 @@ class StepList extends Component
         }
 
         const form = (
-            <form>
-                <div id="formBody">   
-                    {this.state.currentStep}
+            <form onSubmit={this.onSubmit}>
+                <div id="formBody">
                     {step.questions.default.map((input) => <Field  onValue={this.onValue} key={input.id} input={input} />)}
                 </div>
                 { this.renderNavButtons() }
@@ -171,15 +183,11 @@ class StepList extends Component
         )
         return form
     }
-
-    render() {
-        return (
-            <div>
-                { this.renderForm() }
-            </div>
-        )
-    }
 }
+
+
+
+// Redux Stuff
 
 function mapStateToProps(state) {
     return {
@@ -189,7 +197,7 @@ function mapStateToProps(state) {
 }
 
 function mapActionsToDispatch(dispatch) {
-   return bindActionCreators({ loadStep, setAnswer }, dispatch)
+   return bindActionCreators({ loadStep, setAnswer, submitForm }, dispatch)
 }
 
 export default connect(mapStateToProps, mapActionsToDispatch)(StepList)

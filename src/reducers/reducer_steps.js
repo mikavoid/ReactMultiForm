@@ -19,6 +19,12 @@ export default function () {
                         "required": true
                     },
                     {
+                        "id": "interet_general_3",
+                        "label": "Interet général 3",
+                        "type": "textarea",
+                        "placeholder": "blabla 2"
+                    },
+                    {
                         "id": "check",
                         "label": "Un checkbox",
                         "type": "checkbox",

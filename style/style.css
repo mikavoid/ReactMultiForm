@@ -1,4 +1,4 @@
-#formBody {
-    height : 300px;
+form {
+    height : 100vh;
     overflow-y: auto;
 }

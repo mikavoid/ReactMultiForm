@@ -22,8 +22,8 @@ export default class CheckBox extends React.Component
     }
 
     onValue(e) {
-        this.toggle(e.target.value)
-        this.props.onValue(e, [...this.selected])
+        this.toggle(e.target.dataset.text)
+        this.props.onValue([...this.selected])
     }
 
 
@@ -41,6 +41,7 @@ export default class CheckBox extends React.Component
                         name={input.id} 
                         id={checkbox.id} 
                         key={checkbox.id}
+                        data-text={checkbox.text}
                         value={checkbox.value}  />
                    {checkbox.text}
                 </label>

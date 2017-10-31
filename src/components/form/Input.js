@@ -6,6 +6,10 @@ export default class Input extends React.Component
         super(props)
     }
 
+    onValue(e) {
+        this.props.onValue([e.target.value])
+    }
+
     render() {
         const {input, onValue} = this.props
         
@@ -13,7 +17,7 @@ export default class Input extends React.Component
             <div className="form-group">
                 <label htmlFor={input.id}>{input.label}</label>
                 <input
-                    onKeyUp={onValue}
+                    onKeyUp={this.onValue.bind(this)}
                     required={input.required}
                     type={input.type}
                     className="form-control"

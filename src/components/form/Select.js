@@ -8,24 +8,40 @@ export default class Select extends React.Component
         this.state = {test: ''}
         this.onValue = this.onValue.bind(this)
         this.renderOptions = this.renderOptions.bind(this)
+        this.setSelected = this.setSelected.bind(this)
     }
 
     componentWillMount() {
         this.selected = new Set()
     }
 
-    onValue(e) {
-        for (let option of e.target.options) {
-            if (option.selected) {
-                this.selected.add(option.value)
-            } else {
-                if (this.selected.has(option.value)) {
-                    this.selected.delete(option.value)
+    componentDidMount() {
+        const elem = this.refs[this.props.input.id]
+       this.setSelected(elem).then(() => {
+        this.props.onValue([...this.selected])
+       })
+        console.log(this.selected)
+    }
+
+    setSelected(elementOptions) {
+        return new Promise((resolve, reject) => {
+            for (let option of elementOptions) {
+                if (option.selected) {
+                    this.selected.add(option.text)
+                } else {
+                    if (this.selected.has(option.text)) {
+                        this.selected.delete(option.text)
+                    }
                 }
             }
-        }
+            resolve()
+        })   
+    }
 
-        this.props.onValue(e, [...this.selected])
+    onValue(e) {
+        this.setSelected(e.target.options).then(() => {
+            this.props.onValue([...this.selected])
+        })
     }
 
     renderOptions() {
