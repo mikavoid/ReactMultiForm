@@ -15,7 +15,8 @@ class StepList extends Component
 
         this.state = { 
             currentStep : 0,
-            answers : []
+            answers : [],
+            group: 'default'
         }
 
         this.loadNextStep = this.loadNextStep.bind(this)
@@ -29,9 +30,17 @@ class StepList extends Component
     // Life Cycle Method
 
     componentWillMount() {
-        this.initStepAnswers(0)
-        return this.props.loadStep(this.props.steps[0])
+        return this.props.loadStep(this.props.steps[0], null)
     }
+
+    componentWillReceiveProps() {
+        this.initStepAnswers(this.state.currentStep)
+    }
+
+    componentDidMount() {
+        //alert(this.props.activeStep)
+    }
+
 
     render() {
         return (
@@ -52,9 +61,11 @@ class StepList extends Component
      * @param {Array: [fieldInfos[], value]} data 
      */
     onValue(data) {
+        console.log('data', data)
         const responseIndex = this.state.answers.findIndex((answer) => answer.id == data.fieldInfos.id)
         const answers = [...this.state.answers]
-        answers[responseIndex].value = data.value
+        console.log(this.state.answers)
+        answers[responseIndex].value = data.values
         this.setState({answers})
     }
 
@@ -64,15 +75,16 @@ class StepList extends Component
      * Creates a local state for answers
      * These answers will be sent to redux when loading next step
      */
-    initStepAnswers() {
-        const questionGroup = 'default'
-        const step = this.props.activeStep || this.props.steps[0]
-        const questions = step.questions[questionGroup]
-        const answers = [...this.state.answers]
+    initStepAnswers(stepNumber) {
+        
+        const step = this.props.steps[stepNumber]
 
+        const questions = step.questions['default']
         if (!questions) {
-            return
+            return console.log('No questions found in group')
         }
+
+        const answers = [...this.state.answers]
         for (const question of questions) {
             const response = {
                 step: step.id, 
@@ -129,9 +141,13 @@ class StepList extends Component
      * Call the redux action creator: loadStep in charge of loading the current step
      */
     loadStep() {
-        const step = this.props.steps[this.state.currentStep]
-        this.initStepAnswers()
-        return this.props.loadStep(step)
+        const stepNumber = this.state.currentStep
+        const step = this.props.steps[stepNumber]
+        const answers = this.state.answers.filter((answer) => {
+            return answer.step === (stepNumber - 1)
+        })
+        console.log('ANSWERS', answers)
+        return this.props.loadStep(step, answers)
     }
 
     /**

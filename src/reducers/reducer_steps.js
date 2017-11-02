@@ -19,53 +19,42 @@ export default function () {
                         "required": true
                     },
                     {
-                        "id": "interet_general_3",
-                        "label": "Interet général 3",
-                        "type": "textarea",
-                        "placeholder": "blabla 2"
-                    },
-                    {
-                        "id": "check",
-                        "label": "Un checkbox",
-                        "type": "checkbox",
-                        "items" : [
-                            {text: "Le choix 1", value:"1"},
-                            {text: "Le choix 2", value:"2", checked: true},
-                            {text: "Le choix 3", value:"3"},
-                            {text: "Le choix 4", value:"4"}
-                        ]
-                    },
-                    {
-                        "id": "radio",
-                        "label": "Un radio",
+                        "id": "interet_general",
+                        "label": "Interet general",
                         "type": "radio",
                         "items" : [
-                            {text: "Le choix 1", value:"1"},
-                            {text: "Le choix 2", value:"2", checked: true},
-                            {text: "Le choix 3", value:"3"},
-                            {text: "Le choix 4", value:"4"}
+                            {text: "Oui", value:"oui"},
+                            {text: "Non", value:"non", checked: true}
                         ]
-                    },
-                    {
-                        "id": "select",
-                        "label": "Un select",
-                        "type": "select",
-                        "items" : [
-                            {text: "Le choix 1", value:"1"},
-                            {text: "Le choix 2", value:"2", selected: true},
-                            {text: "Le choix 3", value:"3"},
-                            {text: "Le choix 4", value:"4"}
-                        ],
-                        "multiple": true
-                    },
-                    {
-                        "id": "interet_general",
-                        "label": "Interet général",
-                        "type": "text",
-                        "placeholder": "blabla",
-                        "required": true
                     }
                 ]
+            }
+        },
+
+        {
+            "id": 1,
+            "name": "Step 2",
+            "depends_on": ["type_de_projet"],
+            "next_condition": false,
+            "questions": {
+                "culture": [{
+                    "id": "culture",
+                    "label": "Culture",
+                    "type": "text",
+                    "placeholder": "culture"
+                }],
+                "sport": [{
+                    "id": "sport",
+                    "label": "Sport",
+                    "type": "text",
+                    "placeholder": "Sport"
+                }],
+                "default": [{
+                    "id": "default",
+                    "label": "Default",
+                    "type": "text",
+                    "placeholder": "Default"
+                }]
             }
         },
 
@@ -73,7 +62,7 @@ export default function () {
 
         // Modele
         {
-            "id": 1,
+            "id": 2,
             "name": "Step 1",
             "depends_on": false,
             "next_condition": {
@@ -135,28 +124,8 @@ export default function () {
                     }
                 ]
             }
-        },
-
-        {
-            "id": 2,
-            "name": "Step 2",
-            "depends_on": ["interet_general"],
-            "next_condition": false,
-            "questions": {
-                "culture": [{
-                    "id": "culture",
-                    "label": "Culture",
-                    "type": "text",
-                    "placeholder": "culture"
-                }],
-                "default": [{
-                    "id": "sport",
-                    "label": "Sport",
-                    "type": "text",
-                    "placeholder": "culture"
-                }],
-                "sport": false
-            }
         }
+
+        
     ]
 }
