@@ -19,6 +19,25 @@ export default function () {
                         "required": true
                     },
                     {
+                        "id": "sport",
+                        "label": "Sport",
+                        "type": "textarea",
+                        "placeholder": "Sport",
+                        "row": 300,
+                        "value": "Sporttsfbgrbgt"
+                    },
+                    {
+                        "id": "check",
+                        "label": "Un checkbox",
+                        "type": "checkbox",
+                        "items" : [
+                            {text: "Le choix 1", value:"1"},
+                            {text: "Le choix 2", value:"2", checked: true},
+                            {text: "Le choix 3", value:"3", checked: true},
+                            {text: "Le choix 4", value:"4"}
+                        ]
+                    },
+                    {
                         "id": "interet_general",
                         "label": "Interet general",
                         "type": "radio",

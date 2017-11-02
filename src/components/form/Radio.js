@@ -11,6 +11,12 @@ export default class Radio extends React.Component
     onValue(e) {
         return this.props.onValue([e.target.dataset.text])
     }
+
+    
+    componentDidMount() {
+        const elem = this.refs[this.props.input.id]
+        this.props.onValue([elem.value])
+    }
   
     renderRadioBtns() {
         const { input } = this.props
@@ -19,6 +25,8 @@ export default class Radio extends React.Component
                 <div key={radio.value} className="form-check">
                     <label className="form-check-label">
                     <input 
+                        ref={input.id}
+                        defaultChecked={true}
                         onChange={this.onValue.bind(this)}
                         type="radio" 
                         className="form-check-input" 
